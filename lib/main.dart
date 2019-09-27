@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import './src/models/question.dart';
+import 'package:questionairre/src/bloc/bloc.dart';
+import 'package:questionairre/src/models/question.dart';
 import 'package:tuple/tuple.dart';
 
 void main() => runApp(MyApp());
@@ -23,12 +25,20 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Questionairre"),
-        ),
-        body: Center(child: QuestionWidget(QuestionModel.example())),
-      ),
+      home: BlocBuilder<PollsterBloc, PollsterState>(
+          bloc: PollsterBloc(),
+          builder: (context, state) {
+            if (true) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text("Questionairre"),
+                ),
+                body: Center(child: QuestionWidget(QuestionModel.example())),
+              );
+            } else {
+              return Placeholder();
+            }
+          }),
     );
   }
 }
