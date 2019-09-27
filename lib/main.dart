@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             if (true) {
               return Scaffold(
                 appBar: AppBar(
-                  title: Text("Questionairre"),
+                  title: Text("Questionnaire"),
                 ),
                 body: Center(child: QuestionWidget(QuestionModel.example())),
               );
@@ -53,7 +53,12 @@ class QuestionWidget extends StatefulWidget {
 
 class _QuestionWidgetState extends State<QuestionWidget> {
   List<Tuple2<Tendency, String>> responses = [];
-  Tendency selectedTendency;
+  Map<Tendency, int> answers = {
+    Tendency.driver: null,
+    Tendency.amiable: null,
+    Tendency.analytical: null,
+    Tendency.expressive: null
+  };
 
   @override
   void initState() {
@@ -76,23 +81,75 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(widget.question.question,
-                  style: Theme.of(context).textTheme.headline),
+              child: Column(
+                children: <Widget>[
+                  Text(widget.question.question,
+                      style: Theme.of(context).textTheme.headline),
+                ],
+              ),
             ),
             Divider(),
+            Text(
+              "Fill from 1-4: 1 describing you best and 4 the least",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
             for (Tuple2<Tendency, String> response in responses)
               ListTile(
                 title: Text(response.item2),
-                leading: Radio(
-                  value: response.item1,
-                  groupValue: selectedTendency,
-                  onChanged: (Tendency value) {
-                    setState(() {
-                      selectedTendency = response.item1;
-                    });
+                leading: DropdownButton<int>(
+                  value: answers[response.item1],
+                  //icon: Icon(Icons.arrow_downward),
+                  //hint: Text("Select"),
+                  onChanged: (int newvalue) {
+                    setState(
+                      () {
+                        if (answers.containsValue(newvalue)) {
+                          print("$newvalue already exists");
+                          answers.forEach((Tendency eachTendency, int value) {
+                            if (value == newvalue) {
+                              answers[eachTendency] = null;
+                            }
+                          });
+                        }
+                        answers[response.item1] = newvalue;
+                      },
+                    );
                   },
+                  items: [
+                    DropdownMenuItem(
+                      value: 1,
+                      child: Text("1"),
+                    ),
+                    DropdownMenuItem(
+                      value: 2,
+                      child: Text("2"),
+                    ),
+                    DropdownMenuItem(
+                      value: 3,
+                      child: Text("3"),
+                    ),
+                    DropdownMenuItem(
+                      value: 4,
+                      child: Text("4"),
+                    ),
+                  ],
                 ),
-              )
+              ),
+            RaisedButton(
+                child: Text("SUBMIT"),
+                onPressed: () {
+                  if (answers.values.every((element) => element != null)) {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Submitted!"),
+                    ));
+                  } else {
+                    Scaffold.of(context).showSnackBar(SnackBar(
+                      content: Text("Please fill out all the responses"),
+                      backgroundColor: Colors.red,
+                    ));
+                  }
+                })
           ],
         ),
       ),
