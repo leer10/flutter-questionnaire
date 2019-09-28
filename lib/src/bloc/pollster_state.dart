@@ -34,6 +34,10 @@ class ServingQuestions extends PollsterState {
 }
 
 class ServingResults extends PollsterState {
+  final List<Tendency> order;
+  final Map<Tendency, int> answers;
+  ServingResults({@required this.answers, @required this.order});
+
   @override
-  String toString() => "Serving Results";
+  String toString() => "Serving Results: $answers";
 }
