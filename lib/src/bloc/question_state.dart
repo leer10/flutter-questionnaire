@@ -21,6 +21,9 @@ class QuestionLoaded extends QuestionState {
   @override
   String toString() => 'QuestionLoaded';
   final QuestionModel questionmodel;
+  final int totalQuestions;
+  final int currentQuestion;
 
-  QuestionLoaded({this.questionmodel});
+  QuestionLoaded(
+      {this.questionmodel, this.totalQuestions, this.currentQuestion});
 }

@@ -5,7 +5,7 @@ import 'package:questionairre/src/models/question.dart';
 class QuestionRepository {
   Questionairre questionairre;
 
-  void loadQuestions() async {
+  Future<void> loadQuestions() async {
     String jsonString = await rootBundle.loadString('assets/questions.json');
     questionairre = Questionairre.fromJson(jsonDecode(jsonString));
   }

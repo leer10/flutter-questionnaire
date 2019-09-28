@@ -19,10 +19,10 @@ class QuestionsLoaded extends PollsterEvent {
 }
 
 class QuestionSubmitted extends PollsterEvent {
-  final Tendency tendency;
+  final Map<Tendency, int> answers;
 
-  QuestionSubmitted({this.tendency}) : super([tendency]);
+  QuestionSubmitted({this.answers}) : super([answers]);
 
   @override
-  String toString() => "Question Submitted";
+  String toString() => "Question Submitted: $answers";
 }

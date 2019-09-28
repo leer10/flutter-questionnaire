@@ -1,51 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc/bloc.dart';
 
 import 'package:questionairre/src/bloc/bloc.dart';
 import 'package:questionairre/src/models/question.dart';
 import 'package:tuple/tuple.dart';
 
-void main() => runApp(MyApp());
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onEvent(Bloc bloc, Object event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+
+  @override
+  void onError(Bloc bloc, Object error, StackTrace stacktrace) {
+    super.onError(bloc, error, stacktrace);
+    print(error);
+  }
+}
+
+void main() {
+  BlocSupervisor.delegate = SimpleBlocDelegate();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return BlocProvider<PollsterBloc>(
+      builder: (context) {
+        print("started pollsterbloc");
+        return PollsterBloc()..dispatch(AppStarted());
+      },
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.blue,
+        ),
+        home:
+            BlocBuilder<PollsterBloc, PollsterState>(builder: (context, state) {
+          if (state is DataUninitalized) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("Questionnaire"),
+              ),
+              body: Center(child: CircularProgressIndicator()),
+            );
+          } else if (state is ServingQuestions) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text("Questionnaire"),
+              ),
+              body: Center(
+                child: QuestionWidget(
+                    question: state.questionmodel,
+                    currentQuestion: state.currentQuestion,
+                    totalQuestions: state.totalQuestions),
+              ),
+            );
+          } else {
+            return Placeholder();
+          }
+        }),
       ),
-      home: BlocBuilder<PollsterBloc, PollsterState>(
-          bloc: PollsterBloc(),
-          builder: (context, state) {
-            if (true) {
-              return Scaffold(
-                appBar: AppBar(
-                  title: Text("Questionnaire"),
-                ),
-                body: Center(child: QuestionWidget(QuestionModel.example())),
-              );
-            } else {
-              return Placeholder();
-            }
-          }),
     );
   }
 }
 
 class QuestionWidget extends StatefulWidget {
   final QuestionModel question;
-  QuestionWidget(this.question);
+  int currentQuestion;
+  int totalQuestions;
+  QuestionWidget(
+      {@required this.question, this.currentQuestion, this.totalQuestions});
 
   @override
   _QuestionWidgetState createState() => _QuestionWidgetState();
@@ -136,20 +180,33 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                   ],
                 ),
               ),
-            RaisedButton(
-                child: Text("SUBMIT"),
-                onPressed: () {
-                  if (answers.values.every((element) => element != null)) {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("Submitted!"),
-                    ));
-                  } else {
-                    Scaffold.of(context).showSnackBar(SnackBar(
-                      content: Text("Please fill out all the responses"),
-                      backgroundColor: Colors.red,
-                    ));
-                  }
-                })
+            Stack(
+              alignment: Alignment(0, 0),
+              children: <Widget>[
+                RaisedButton(
+                    child: Text("SUBMIT"),
+                    onPressed: () {
+                      if (answers.values.every((element) => element != null)) {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text("Submitted!"),
+                        ));
+                        BlocProvider.of<PollsterBloc>(context)
+                            .dispatch(QuestionSubmitted(answers: answers));
+                      } else {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text("Please fill out all the responses"),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+                    }),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                      "${widget.currentQuestion}/${widget.totalQuestions}",
+                      style: TextStyle(fontSize: 24)),
+                )
+              ],
+            )
           ],
         ),
       ),
