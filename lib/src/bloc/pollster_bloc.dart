@@ -21,41 +21,41 @@ class PollsterBloc extends Bloc<PollsterEvent, PollsterState> {
   Stream<PollsterState> mapEventToState(
     PollsterEvent event,
   ) async* {
+    // We get this event as soon as the widget tree is initally built (AKA app start).
     if (event is AppStarted) {
+      //It requests we load the questions from a JSON file
       questionRepository = QuestionRepository();
       await questionRepository.loadQuestions();
+      //We make double sure that the JSON is working correctly
       assert(questionRepository.questionairre.questions.isNotEmpty);
+      //If all is in order, we put the loaded questions into our bag called unansweredQuestions
       unansweredQuestions = questionRepository.questionairre.questions.toList();
+      //We then call this function that will generate a Question state with our fresh questions
       yield newQuestion();
     }
-
+    // This fires when a user presses "SUBMIT" and the stateful widget deems the input submittable
     if (event is QuestionSubmitted) {
-      driver = driver +
-          event.answers[Tendency
-              .driver]; // we're adding each individual personality score to the total tally
+      // we're adding each individual personality score to the total tally
+      driver = driver + event.answers[Tendency.driver];
       amiable = amiable + event.answers[Tendency.amiable];
       analytical = analytical + event.answers[Tendency.analytical];
       expressive = expressive + event.answers[Tendency.expressive];
       if (unansweredQuestions.isNotEmpty) {
-        // haven't ran out of questions, so let's show a new one
+        // haven't ran out of questions yet, so let's show a new one
         yield newQuestion();
       } else {
         //ran out of questions, so let's tally up the results and push a ServingResults state
-        Map<Tendency, int> results =
-            {}; // We're taking the individual int tallies and putting them into a neat map
-        List<int> answerList = [
-          driver,
-          amiable,
-          analytical,
-          expressive
-        ]; // we're putting the tallies into a list of ints so we can sort to show which is most
+        // We're taking the individual int tallies and putting them into a neat map
+        Map<Tendency, int> results = {};
+        // we're putting the tallies into a list of ints so we can sort
+        List<int> answerList = [driver, amiable, analytical, expressive];
         answerList.sort();
-        List<Tendency> ranking =
-            []; //previous is raw numbers, but we'll put in here as the actual enums for ease of use
+        //previous is only just numbers, so we'll also have a list of Tendencies to associate with the ints
+        List<Tendency> ranking = [];
         answerList.forEach((element) {
-          // we're going though each element (starting from the bottom which is the 'strongest') and adding it to the ranking list, and then while we're at it add it to the map
+          // we're going though each sorted number (starting from the bottom which is the 'strongest'), seeing which tendency it is and put it in, and then while we're at it add it to the map
           if (element == driver && !results.containsKey(Tendency.driver)) {
-            // making sure it doesn't already contain a key makes sure we don't accidentally add matching scores to the first one that matches for example if both analytical and driven get 22, analytical won't get both.
+            // making sure it doesn't already match with an added key makes sure we don't accidentally add matching scores to the first one that matches for example if both analytical and driven get 22, analytical won't get both.
             ranking.add(Tendency.driver);
             results[Tendency.driver] = driver;
           } else if (element == amiable &&
@@ -72,15 +72,20 @@ class PollsterBloc extends Bloc<PollsterEvent, PollsterState> {
             results[Tendency.expressive] = expressive;
           }
         });
+        //Now that we have both a ranking of Tendencies, and the number that each Tendency has we can present it as a State
         yield ServingResults(answers: results, order: ranking);
       }
     }
   }
 
   ServingQuestions newQuestion() {
+    //We have unansweredQuestions, our bag of yet-to-be-answered questions
     QuestionModel newQuestion;
+    //we're taking from the bag from the front, and putting it into the newQuestion slot
     newQuestion = unansweredQuestions.removeAt(0);
+    //now we'll put that into a bag called answeredQuestions just in case they're needed later
     answeredQuestions.add(newQuestion);
+    //then we'll present the new question as a new state, whilst also passing along current/total question quantities
     return ServingQuestions(
         questionmodel: newQuestion,
         currentQuestion: answeredQuestions.length,

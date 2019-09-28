@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//Contains the scaffold that's used by all the apps. Maybe I should just instead move the BlocBuilder into the body and let them share a single Scaffold
 class AppScaffold extends StatelessWidget {
   final String titleText;
   final Widget body;

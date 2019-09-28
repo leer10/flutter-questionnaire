@@ -53,22 +53,23 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home:
-            BlocBuilder<PollsterBloc, PollsterState>(builder: (context, state) {
-          if (state is DataUninitalized) {
-            return new LoadingPage();
-          } else if (state is ServingQuestions) {
-            return new QuestionPage(
-              servingQuestionsState: state,
-            );
-          } else if (state is ServingResults) {
-            return new ResultsPage(
-              servingResultsState: state,
-            );
-          } else {
-            return Placeholder();
-          }
-        }),
+        home: BlocBuilder<PollsterBloc, PollsterState>(
+          builder: (context, state) {
+            if (state is DataUninitalized) {
+              return new LoadingPage();
+            } else if (state is ServingQuestions) {
+              return new QuestionPage(
+                servingQuestionsState: state,
+              );
+            } else if (state is ServingResults) {
+              return new ResultsPage(
+                servingResultsState: state,
+              );
+            } else {
+              return Placeholder();
+            }
+          },
+        ),
       ),
     );
   }

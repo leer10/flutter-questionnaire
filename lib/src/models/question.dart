@@ -57,6 +57,7 @@ class Questionairre {
 
 enum Tendency { driver, amiable, analytical, expressive }
 
+// Printing a Tendency results in "Tendency.driver" so we have this helper function
 String namedTendency(Tendency tendency) {
   switch (tendency) {
     case Tendency.driver:
@@ -71,6 +72,8 @@ String namedTendency(Tendency tendency) {
   return "NULL";
 }
 
+//This was some testing to make sure it works. First one works just as-is, second one tries file interaction.
+//Will need to uncomment imports above to use
 main() {
   /*
   // From first development, and generating first test JSON
