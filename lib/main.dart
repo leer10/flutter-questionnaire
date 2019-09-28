@@ -72,7 +72,8 @@ class MyApp extends StatelessWidget {
                 child: QuestionWidget(
                     question: state.questionmodel,
                     currentQuestion: state.currentQuestion,
-                    totalQuestions: state.totalQuestions),
+                    totalQuestions: state.totalQuestions,
+                    key: ObjectKey(state.questionmodel)),
               ),
             );
           } else {
@@ -86,10 +87,15 @@ class MyApp extends StatelessWidget {
 
 class QuestionWidget extends StatefulWidget {
   final QuestionModel question;
-  int currentQuestion;
-  int totalQuestions;
+
+  final int currentQuestion;
+  final int totalQuestions;
   QuestionWidget(
-      {@required this.question, this.currentQuestion, this.totalQuestions});
+      {@required this.question,
+      @required Key key,
+      this.currentQuestion,
+      this.totalQuestions})
+      : super(key: key);
 
   @override
   _QuestionWidgetState createState() => _QuestionWidgetState();
