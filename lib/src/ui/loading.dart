@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'common.dart';
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({
@@ -7,10 +8,8 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Questionnaire"),
-      ),
+    return AppScaffold(
+      titleText: "Questionnaire",
       body: Center(child: CircularProgressIndicator()),
     );
   }

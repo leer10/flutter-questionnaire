@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:questionairre/src/bloc/bloc.dart';
 import 'package:questionairre/src/models/question.dart';
+import 'common.dart';
 
 class ResultsPage extends StatelessWidget {
   final ServingResults servingResultsState;
@@ -8,10 +9,8 @@ class ResultsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Results"),
-        ),
+    return AppScaffold(
+        titleText: "Results",
         body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

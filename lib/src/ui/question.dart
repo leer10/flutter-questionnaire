@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:questionairre/src/bloc/bloc.dart';
 import 'package:questionairre/src/models/question.dart';
 import 'package:tuple/tuple.dart';
+import 'common.dart';
 
 class QuestionPage extends StatelessWidget {
   final ServingQuestions servingQuestionsState;
@@ -11,10 +12,8 @@ class QuestionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Questionnaire"),
-      ),
+    return AppScaffold(
+      titleText: "Questionnaire",
       body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Center(
