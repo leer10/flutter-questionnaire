@@ -85,19 +85,19 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     );
                   },
                   items: [
-                    DropdownMenuItem(
+                    const DropdownMenuItem(
                       value: 1,
                       child: Text("1"),
                     ),
-                    DropdownMenuItem(
+                    const DropdownMenuItem(
                       value: 2,
                       child: Text("2"),
                     ),
-                    DropdownMenuItem(
+                    const DropdownMenuItem(
                       value: 3,
                       child: Text("3"),
                     ),
-                    DropdownMenuItem(
+                    const DropdownMenuItem(
                       value: 4,
                       child: Text("4"),
                     ),
@@ -108,7 +108,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               alignment: Alignment(0, 0),
               children: <Widget>[
                 RaisedButton(
-                    child: Text("SUBMIT"),
+                    child: const Text("SUBMIT"),
                     onPressed: () {
                       if (answers.values.every((element) => element != null)) {
                         BlocProvider.of<PollsterBloc>(context)

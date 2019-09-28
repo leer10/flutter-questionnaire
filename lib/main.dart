@@ -59,14 +59,14 @@ class MyApp extends StatelessWidget {
           if (state is DataUninitalized) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Questionnaire"),
+                title: const Text("Questionnaire"),
               ),
               body: Center(child: CircularProgressIndicator()),
             );
           } else if (state is ServingQuestions) {
             return Scaffold(
               appBar: AppBar(
-                title: Text("Questionnaire"),
+                title: const Text("Questionnaire"),
               ),
               body: LayoutBuilder(builder:
                   (BuildContext context, BoxConstraints viewportConstraints) {
@@ -84,7 +84,7 @@ class MyApp extends StatelessWidget {
           } else if (state is ServingResults) {
             return Scaffold(
                 appBar: AppBar(
-                  title: Text("Results"),
+                  title: const Text("Results"),
                 ),
                 body: Center(
                   child: Column(
