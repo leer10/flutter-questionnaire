@@ -57,7 +57,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               ),
             ),
             Divider(),
-            Text(
+            const Text(
               "Fill from 1-4: 1 describing you best and 4 the least",
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey),
