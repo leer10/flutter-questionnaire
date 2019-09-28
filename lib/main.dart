@@ -68,13 +68,18 @@ class MyApp extends StatelessWidget {
               appBar: AppBar(
                 title: Text("Questionnaire"),
               ),
-              body: Center(
-                child: QuestionWidget(
-                    question: state.questionmodel,
-                    currentQuestion: state.currentQuestion,
-                    totalQuestions: state.totalQuestions,
-                    key: ObjectKey(state.questionmodel)),
-              ),
+              body: LayoutBuilder(builder:
+                  (BuildContext context, BoxConstraints viewportConstraints) {
+                return Center(
+                  child: SingleChildScrollView(
+                    child: QuestionWidget(
+                        question: state.questionmodel,
+                        currentQuestion: state.currentQuestion,
+                        totalQuestions: state.totalQuestions,
+                        key: ObjectKey(state.questionmodel)),
+                  ),
+                );
+              }),
             );
           } else if (state is ServingResults) {
             return Scaffold(
