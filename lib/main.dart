@@ -193,9 +193,6 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     child: Text("SUBMIT"),
                     onPressed: () {
                       if (answers.values.every((element) => element != null)) {
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text("Submitted!"),
-                        ));
                         BlocProvider.of<PollsterBloc>(context)
                             .dispatch(QuestionSubmitted(answers: answers));
                       } else {
