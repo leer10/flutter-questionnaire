@@ -57,6 +57,20 @@ class Questionairre {
 
 enum Tendency { driver, amiable, analytical, expressive }
 
+String namedTendency(Tendency tendency) {
+  switch (tendency) {
+    case Tendency.driver:
+      return "Driver";
+    case Tendency.amiable:
+      return "Amiable";
+    case Tendency.analytical:
+      return "Analytical";
+    case Tendency.expressive:
+      return "Expressive";
+  }
+  return "NULL";
+}
+
 main() {
   /*
   // From first development, and generating first test JSON
