@@ -4,6 +4,33 @@ import 'package:questionairre/src/bloc/bloc.dart';
 import 'package:questionairre/src/models/question.dart';
 import 'package:tuple/tuple.dart';
 
+class QuestionPage extends StatelessWidget {
+  final ServingQuestions servingQuestionsState;
+  QuestionPage({Key key, @required this.servingQuestionsState})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Questionnaire"),
+      ),
+      body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return Center(
+          child: SingleChildScrollView(
+            child: QuestionWidget(
+                question: servingQuestionsState.questionmodel,
+                currentQuestion: servingQuestionsState.currentQuestion,
+                totalQuestions: servingQuestionsState.totalQuestions,
+                key: ObjectKey(servingQuestionsState.questionmodel)),
+          ),
+        );
+      }),
+    );
+  }
+}
+
 class QuestionWidget extends StatefulWidget {
   final QuestionModel question;
 
