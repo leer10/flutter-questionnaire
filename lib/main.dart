@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:questionairre/questionwidget.dart';
 
 import 'package:questionairre/src/bloc/bloc.dart';
+import 'package:questionairre/src/models/question.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -75,6 +76,44 @@ class MyApp extends StatelessWidget {
                     key: ObjectKey(state.questionmodel)),
               ),
             );
+          } else if (state is ServingResults) {
+            return Scaffold(
+                appBar: AppBar(
+                  title: Text("Results"),
+                ),
+                body: Column(
+                  children: <Widget>[
+                    Card(
+                      child: Container(
+                        height: 200,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                              "Your dominant style is ${namedTendency(state.order.first)} with a score of ${state.answers[state.order.first]}.",
+                              textAlign: TextAlign.center,
+                            ),
+                            if (state.answers[state.order[1]] ==
+                                state.answers[state.order[2]])
+                              Text(
+                                "Your influencing style is a mixture of ${namedTendency(state.order[1])} and ${namedTendency(state.order[2])} with a score of ${state.answers[state.order[1]]}.",
+                                textAlign: TextAlign.center,
+                              )
+                            else
+                              Text(
+                                "Your influencing style is ${namedTendency(state.order[1])} with a score of ${state.answers[state.order[1]]}.",
+                                textAlign: TextAlign.center,
+                              ),
+                            Text(
+                              "Your area of need is ${namedTendency(state.order.last)} with a score of ${state.answers[state.order.last]}.",
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ));
           } else {
             return Placeholder();
           }
