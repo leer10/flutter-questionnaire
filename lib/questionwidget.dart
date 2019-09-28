@@ -42,91 +42,94 @@ class _QuestionWidgetState extends State<QuestionWidget> {
     return Card(
         child: Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                Text(widget.question.question,
-                    style: Theme.of(context).textTheme.headline),
-              ],
-            ),
-          ),
-          Divider(),
-          Text(
-            "Fill from 1-4: 1 describing you best and 4 the least",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey),
-          ),
-          for (Tuple2<Tendency, String> response in responses)
-            ListTile(
-              title: Text(response.item2),
-              leading: DropdownButton<int>(
-                value: answers[response.item1],
-                //icon: Icon(Icons.arrow_downward),
-                //hint: Text("Select"),
-                onChanged: (int newvalue) {
-                  setState(
-                    () {
-                      if (answers.containsValue(newvalue)) {
-                        print("$newvalue already exists");
-                        answers.forEach((Tendency eachTendency, int value) {
-                          if (value == newvalue) {
-                            answers[eachTendency] = null;
-                          }
-                        });
-                      }
-                      answers[response.item1] = newvalue;
-                    },
-                  );
-                },
-                items: [
-                  DropdownMenuItem(
-                    value: 1,
-                    child: Text("1"),
-                  ),
-                  DropdownMenuItem(
-                    value: 2,
-                    child: Text("2"),
-                  ),
-                  DropdownMenuItem(
-                    value: 3,
-                    child: Text("3"),
-                  ),
-                  DropdownMenuItem(
-                    value: 4,
-                    child: Text("4"),
-                  ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 600),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: <Widget>[
+                  Text(widget.question.question,
+                      style: Theme.of(context).textTheme.headline),
                 ],
               ),
             ),
-          Stack(
-            alignment: Alignment(0, 0),
-            children: <Widget>[
-              RaisedButton(
-                  child: Text("SUBMIT"),
-                  onPressed: () {
-                    if (answers.values.every((element) => element != null)) {
-                      BlocProvider.of<PollsterBloc>(context)
-                          .dispatch(QuestionSubmitted(answers: answers));
-                    } else {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        content: Text("Please fill out all the responses"),
-                        backgroundColor: Colors.red,
-                      ));
-                    }
-                  }),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                    "${widget.currentQuestion}/${widget.totalQuestions}",
-                    style: TextStyle(fontSize: 24)),
-              )
-            ],
-          )
-        ],
+            Divider(),
+            Text(
+              "Fill from 1-4: 1 describing you best and 4 the least",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
+            for (Tuple2<Tendency, String> response in responses)
+              ListTile(
+                title: Text(response.item2),
+                leading: DropdownButton<int>(
+                  value: answers[response.item1],
+                  //icon: Icon(Icons.arrow_downward),
+                  //hint: Text("Select"),
+                  onChanged: (int newvalue) {
+                    setState(
+                      () {
+                        if (answers.containsValue(newvalue)) {
+                          print("$newvalue already exists");
+                          answers.forEach((Tendency eachTendency, int value) {
+                            if (value == newvalue) {
+                              answers[eachTendency] = null;
+                            }
+                          });
+                        }
+                        answers[response.item1] = newvalue;
+                      },
+                    );
+                  },
+                  items: [
+                    DropdownMenuItem(
+                      value: 1,
+                      child: Text("1"),
+                    ),
+                    DropdownMenuItem(
+                      value: 2,
+                      child: Text("2"),
+                    ),
+                    DropdownMenuItem(
+                      value: 3,
+                      child: Text("3"),
+                    ),
+                    DropdownMenuItem(
+                      value: 4,
+                      child: Text("4"),
+                    ),
+                  ],
+                ),
+              ),
+            Stack(
+              alignment: Alignment(0, 0),
+              children: <Widget>[
+                RaisedButton(
+                    child: Text("SUBMIT"),
+                    onPressed: () {
+                      if (answers.values.every((element) => element != null)) {
+                        BlocProvider.of<PollsterBloc>(context)
+                            .dispatch(QuestionSubmitted(answers: answers));
+                      } else {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text("Please fill out all the responses"),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+                    }),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                      "${widget.currentQuestion}/${widget.totalQuestions}",
+                      style: TextStyle(fontSize: 24)),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     ));
   }
