@@ -57,76 +57,114 @@ class MyApp extends StatelessWidget {
         home:
             BlocBuilder<PollsterBloc, PollsterState>(builder: (context, state) {
           if (state is DataUninitalized) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text("Questionnaire"),
-              ),
-              body: Center(child: CircularProgressIndicator()),
-            );
+            return new LoadingPage();
           } else if (state is ServingQuestions) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text("Questionnaire"),
-              ),
-              body: LayoutBuilder(builder:
-                  (BuildContext context, BoxConstraints viewportConstraints) {
-                return Center(
-                  child: SingleChildScrollView(
-                    child: QuestionWidget(
-                        question: state.questionmodel,
-                        currentQuestion: state.currentQuestion,
-                        totalQuestions: state.totalQuestions,
-                        key: ObjectKey(state.questionmodel)),
-                  ),
-                );
-              }),
+            return new QuestionPage(
+              servingQuestionsState: state,
             );
           } else if (state is ServingResults) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: const Text("Results"),
-                ),
-                body: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Card(
-                        child: Container(
-                          height: 200,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Text(
-                                "Your dominant style is ${namedTendency(state.order.first)} with a score of ${state.answers[state.order.first]}.",
-                                textAlign: TextAlign.center,
-                              ),
-                              if (state.answers[state.order[1]] ==
-                                  state.answers[state.order[2]])
-                                Text(
-                                  "Your influencing style is a mixture of ${namedTendency(state.order[1])} and ${namedTendency(state.order[2])} with a score of ${state.answers[state.order[1]]}.",
-                                  textAlign: TextAlign.center,
-                                )
-                              else
-                                Text(
-                                  "Your influencing style is ${namedTendency(state.order[1])} with a score of ${state.answers[state.order[1]]}.",
-                                  textAlign: TextAlign.center,
-                                ),
-                              Text(
-                                "Your area of need is ${namedTendency(state.order.last)} with a score of ${state.answers[state.order.last]}.",
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ));
+            return new ResultsPage(
+              servingResultsState: state,
+            );
           } else {
             return Placeholder();
           }
         }),
       ),
+    );
+  }
+}
+
+class ResultsPage extends StatelessWidget {
+  final ServingResults servingResultsState;
+  ResultsPage({Key key, @required this.servingResultsState}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text("Results"),
+        ),
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Card(
+                child: Container(
+                  height: 200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Text(
+                        "Your dominant style is ${namedTendency(servingResultsState.order.first)} with a score of ${servingResultsState.answers[servingResultsState.order.first]}.",
+                        textAlign: TextAlign.center,
+                      ),
+                      if (servingResultsState
+                              .answers[servingResultsState.order[1]] ==
+                          servingResultsState
+                              .answers[servingResultsState.order[2]])
+                        Text(
+                          "Your influencing style is a mixture of ${namedTendency(servingResultsState.order[1])} and ${namedTendency(servingResultsState.order[2])} with a score of ${servingResultsState.answers[servingResultsState.order[1]]}.",
+                          textAlign: TextAlign.center,
+                        )
+                      else
+                        Text(
+                          "Your influencing style is ${namedTendency(servingResultsState.order[1])} with a score of ${servingResultsState.answers[servingResultsState.order[1]]}.",
+                          textAlign: TextAlign.center,
+                        ),
+                      Text(
+                        "Your area of need is ${namedTendency(servingResultsState.order.last)} with a score of ${servingResultsState.answers[servingResultsState.order.last]}.",
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+}
+
+class QuestionPage extends StatelessWidget {
+  final ServingQuestions servingQuestionsState;
+  QuestionPage({Key key, @required this.servingQuestionsState})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Questionnaire"),
+      ),
+      body: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return Center(
+          child: SingleChildScrollView(
+            child: QuestionWidget(
+                question: servingQuestionsState.questionmodel,
+                currentQuestion: servingQuestionsState.currentQuestion,
+                totalQuestions: servingQuestionsState.totalQuestions,
+                key: ObjectKey(servingQuestionsState.questionmodel)),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class LoadingPage extends StatelessWidget {
+  const LoadingPage({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Questionnaire"),
+      ),
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }
