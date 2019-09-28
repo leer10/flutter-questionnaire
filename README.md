@@ -1,16 +1,17 @@
-# questionairre
+# Flutter Questionnairre
 
-A new Flutter project.
+Simple questionnaire app I made for a friend using the BLoC pattern. Takes a JSON of questions, users rank 1-4 and then presented with a tally at the end.
 
-## Getting Started
+Tested for Flutter for Web, and Android.
 
-This project is a starting point for a Flutter application.
+Follows BLoC pattern except that the question widget is a stateful widget since I thought the answer order randomization would be easier that way.
 
-A few resources to get you started if this is your first Flutter project:
+![Question Card](screenshots/question.png)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+![Results Page](screenshots/results.png)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Todos
+
+ * Make results page prettier
+ * Save progress when user leaves unfinished
+ * Save to QR code?
