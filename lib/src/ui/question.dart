@@ -14,18 +14,22 @@ class QuestionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       titleText: "Questionnaire",
+      //This allows a widget to sit in the middle of a screen (Web, big enough Mobile)
+      //but if the viewport is too small then it will be scrollable and appear fullscreen
       body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-        return Center(
-          child: SingleChildScrollView(
-            child: QuestionWidget(
-                question: servingQuestionsState.questionmodel,
-                currentQuestion: servingQuestionsState.currentQuestion,
-                totalQuestions: servingQuestionsState.totalQuestions,
-                key: ObjectKey(servingQuestionsState.questionmodel)),
-          ),
-        );
-      }),
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+          return Center(
+            child: SingleChildScrollView(
+              //This works with LayoutBuilder. Read the api docs for SingleChildScrollView
+              child: QuestionWidget(
+                  question: servingQuestionsState.questionmodel,
+                  currentQuestion: servingQuestionsState.currentQuestion,
+                  totalQuestions: servingQuestionsState.totalQuestions,
+                  key: ObjectKey(servingQuestionsState.questionmodel)),
+            ),
+          );
+        },
+      ),
     );
   }
 }
