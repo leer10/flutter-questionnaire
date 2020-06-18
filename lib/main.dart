@@ -35,10 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<PollsterBloc>(
-      builder: (context) {
-        print("started pollsterbloc");
-        return PollsterBloc()..dispatch(AppStarted());
-      },
+      create: (BuildContext context) => PollsterBloc()..add(AppStarted()),
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -64,6 +61,10 @@ class MyApp extends StatelessWidget {
             } else if (state is ServingResults) {
               return new ResultsPage(
                 servingResultsState: state,
+              );
+            } else if (state is PromptForContinue) {
+              return new PromptContinuePage(
+                promptForContinueState: state,
               );
             } else {
               return Placeholder();

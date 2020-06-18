@@ -82,7 +82,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               child: Column(
                 children: <Widget>[
                   Text(widget.question.question,
-                      style: Theme.of(context).textTheme.headline),
+                      style: Theme.of(context).textTheme.headline5),
                 ],
               ),
             ),
@@ -142,7 +142,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     onPressed: () {
                       if (answers.values.every((element) => element != null)) {
                         BlocProvider.of<PollsterBloc>(context)
-                            .dispatch(QuestionSubmitted(answers: answers));
+                            .add(QuestionSubmitted(answers: answers));
                       } else {
                         Scaffold.of(context).showSnackBar(SnackBar(
                           content: Text("Please fill out all the responses"),

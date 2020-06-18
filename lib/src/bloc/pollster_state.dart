@@ -3,14 +3,25 @@ import 'package:meta/meta.dart';
 import 'package:questionairre/src/models/question.dart';
 
 @immutable
-abstract class PollsterState extends Equatable {
-  PollsterState([List props = const <dynamic>[]]) : super(props);
+abstract class PollsterState {
+  PollsterState();
 }
 
 //This is when the app is called but before we can access the JSON and get the questions
 class DataUninitalized extends PollsterState {
   @override
   String toString() => "Data not loaded";
+}
+
+class PromptForContinue extends PollsterState {
+  final int totalQuestions;
+  final int currentQuestion;
+
+  PromptForContinue(
+      {@required this.totalQuestions, @required this.currentQuestion});
+
+  @override
+  String toString() => "Prompt for continue. ";
 }
 
 //Yet unused. For future such as if (un)finished data found
@@ -30,7 +41,7 @@ class ServingQuestions extends PollsterState {
       @required this.totalQuestions,
       @required this.currentQuestion})
       : assert(questionmodel != null),
-        super([questionmodel, totalQuestions, currentQuestion]);
+        super();
 
   @override
   String toString() => "Serving Question:\n $questionmodel";

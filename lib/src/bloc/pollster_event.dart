@@ -6,17 +6,32 @@ import 'package:questionairre/src/models/question.dart';
 // See mapEventToState in pollster_bloc.dart for info on which does which
 @immutable
 abstract class PollsterEvent extends Equatable {
-  PollsterEvent([List props = const <dynamic>[]]) : super(props);
+  PollsterEvent([List props = const <dynamic>[]]) : super();
 }
 
 class AppStarted extends PollsterEvent {
   @override
   String toString() => "App Started";
+
+  @override
+  List<Object> get props => [];
 }
 
-class QuestionsLoaded extends PollsterEvent {
+class ResumeResponse extends PollsterEvent {
+  final bool wishToResume;
+  ResumeResponse({this.wishToResume}) : super([wishToResume]);
+  String toString() => "Resume response: $wishToResume";
+
   @override
-  String toString() => "Questions Loaded";
+  List<Object> get props => [wishToResume];
+}
+
+class LoadQuestions extends PollsterEvent {
+  @override
+  String toString() => "Loading Questions";
+
+  @override
+  List<Object> get props => [];
 }
 
 class QuestionSubmitted extends PollsterEvent {
@@ -27,4 +42,7 @@ class QuestionSubmitted extends PollsterEvent {
 
   @override
   String toString() => "Question Submitted: $answers";
+
+  @override
+  List<Object> get props => [answers];
 }
